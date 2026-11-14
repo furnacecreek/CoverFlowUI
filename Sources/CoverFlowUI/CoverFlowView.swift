@@ -53,11 +53,11 @@ public struct CoverFlowView<Item, ID: Hashable, Content: View>: View {
     ///
     /// The caption defaults to a 45-point bottom inset. Cover layout reserves an extra
     /// 16-point line above the caption, so the projected gap varies with the pane height.
-    /// The builder receives nil when the collection is empty. The measured caption takes precedence
+    /// The builder runs only when the collection has an item. The measured caption takes precedence
     /// over any `captionFrame` supplied to the initializer.
     public func caption<Caption: View>(
         bottomPadding: Double = 45,
-        @ViewBuilder _ content: @escaping (Item?) -> Caption
+        @ViewBuilder _ content: @escaping (Item) -> Caption
     ) -> Self {
         var view = self
         view.caption = CaptionOptions(bottomPadding: bottomPadding) { AnyView(content($0)) }
@@ -120,7 +120,9 @@ public struct CoverFlowView<Item, ID: Hashable, Content: View>: View {
     private var measuredCaption: some View {
         if let caption = self.caption {
             VStack(spacing: 0) {
-                caption.content(self.selectedIndex.map { self.items[$0] })
+                if let index = self.selectedIndex {
+                    caption.content(self.items[index])
+                }
             }
             .onGeometryChange(for: Double.self, of: { Double($0.size.height) }) { height in
                 self.captionHeight = height
@@ -138,7 +140,7 @@ public struct CoverFlowView<Item, ID: Hashable, Content: View>: View {
 
     private struct CaptionOptions {
         let bottomPadding: Double
-        let content: (Item?) -> AnyView
+        let content: (Item) -> AnyView
     }
 }
 

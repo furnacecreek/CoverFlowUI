@@ -16,7 +16,7 @@ struct GalleryView: View {
             Rectangle().fill(cover.color.gradient)
         }
         .caption { cover in
-            Text(cover?.id ?? "No selection")
+            Text(cover.id)
                 .font(.headline)
                 .foregroundStyle(.white)
         }
