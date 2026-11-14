@@ -1,0 +1,215 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C0FE00000000000000000001 /* CoverFlowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0FE00000000000000000004 /* CoverFlowApp.swift */; };
+		C0FE00000000000000000002 /* GalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0FE00000000000000000005 /* GalleryView.swift */; };
+		C0FE00000000000000000003 /* CoverFlowUI in Frameworks */ = {isa = PBXBuildFile; productRef = C0FE00000000000000000016 /* CoverFlowUI */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		C0FE00000000000000000004 /* CoverFlowApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoverFlowApp.swift; sourceTree = "<group>"; };
+		C0FE00000000000000000005 /* GalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryView.swift; sourceTree = "<group>"; };
+		C0FE00000000000000000006 /* CoverFlow Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CoverFlow Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C0FE00000000000000000007 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C0FE00000000000000000003 /* CoverFlowUI in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C0FE00000000000000000008 = {
+			isa = PBXGroup;
+			children = (
+				C0FE00000000000000000009 /* CoverFlowDemo */,
+				C0FE0000000000000000000A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C0FE00000000000000000009 /* CoverFlowDemo */ = {
+			isa = PBXGroup;
+			children = (
+				C0FE00000000000000000004 /* CoverFlowApp.swift */,
+				C0FE00000000000000000005 /* GalleryView.swift */,
+			);
+			name = CoverFlowDemo;
+			sourceTree = "<group>";
+		};
+		C0FE0000000000000000000A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C0FE00000000000000000006 /* CoverFlow Demo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C0FE0000000000000000000B /* CoverFlowDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C0FE00000000000000000013 /* Build configuration list for PBXNativeTarget "CoverFlowDemo" */;
+			buildPhases = (
+				C0FE0000000000000000000D /* Sources */,
+				C0FE00000000000000000007 /* Frameworks */,
+				C0FE0000000000000000000E /* Resources */,
+			);
+			buildRules = ();
+			dependencies = ();
+			name = CoverFlowDemo;
+			packageProductDependencies = (
+				C0FE00000000000000000016 /* CoverFlowUI */,
+			);
+			productName = "CoverFlow Demo";
+			productReference = C0FE00000000000000000006 /* CoverFlow Demo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C0FE0000000000000000000C /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C0FE00000000000000000014 /* Build configuration list for PBXProject "CoverFlowDemo" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (en, Base);
+			mainGroup = C0FE00000000000000000008;
+			packageReferences = (
+				C0FE00000000000000000015 /* XCLocalSwiftPackageReference ".." */,
+			);
+			productRefGroup = C0FE0000000000000000000A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C0FE0000000000000000000B /* CoverFlowDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C0FE0000000000000000000E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = ();
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C0FE0000000000000000000D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C0FE00000000000000000001 /* CoverFlowApp.swift in Sources */,
+				C0FE00000000000000000002 /* GalleryView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		C0FE0000000000000000000F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		C0FE00000000000000000010 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		C0FE00000000000000000011 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.FurnaceCreek.CoverFlowUI.Demo;
+				PRODUCT_NAME = "CoverFlow Demo";
+			};
+			name = Debug;
+		};
+		C0FE00000000000000000012 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.FurnaceCreek.CoverFlowUI.Demo;
+				PRODUCT_NAME = "CoverFlow Demo";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C0FE00000000000000000013 /* Build configuration list for PBXNativeTarget "CoverFlowDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C0FE00000000000000000011 /* Debug */,
+				C0FE00000000000000000012 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C0FE00000000000000000014 /* Build configuration list for PBXProject "CoverFlowDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C0FE0000000000000000000F /* Debug */,
+				C0FE00000000000000000010 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		C0FE00000000000000000015 /* XCLocalSwiftPackageReference ".." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "..";
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C0FE00000000000000000016 /* CoverFlowUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C0FE00000000000000000015 /* XCLocalSwiftPackageReference ".." */;
+			productName = CoverFlowUI;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = C0FE0000000000000000000C /* Project object */;
+}
