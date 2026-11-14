@@ -1,14 +1,18 @@
 import SwiftUI
 
+enum CoverFlowContent<Item, Content: View> {
+    case immediate((Item) -> Content)
+    case asynchronous(@MainActor (Item, CoverFlowPlane, CoverFlowLayout) -> AnyView)
+}
+
 struct CoverFlowCoversView<Item, ID: Hashable, Content: View>: View {
     let items: [Item]
     let id: KeyPath<Item, ID>
     let layout: CoverFlowScrollLayout
     let interaction: CoverFlowInteractionState
-    let content: (Item) -> Content
+    let content: CoverFlowContent<Item, Content>
 
     private var viewport: CGSize { self.layout.metrics.viewport }
-    private var configuration: CoverFlowConfiguration { self.layout.metrics.configuration }
 
     var body: some View {
         let offset = self.interaction.offset
@@ -37,20 +41,61 @@ struct CoverFlowCoversView<Item, ID: Hashable, Content: View>: View {
         }
     }
 
+    @ViewBuilder
     private func cover(for plane: CoverFlowPlane) -> some View {
-        VStack(spacing: plane.reflectionGap) {
-            self.face(for: plane)
-            self.reflection(for: plane)
+        let item = self.items[plane.itemIndex]
+        switch self.content {
+        case .immediate(let content):
+            CoverFlowCover(plane: plane, layout: self.layout.metrics) { content(item) }
+        case .asynchronous(let cover):
+            cover(item, plane, self.layout.metrics)
+        }
+    }
+}
+
+struct CoverFlowAsyncCover<Item, Value, Content: View>: View {
+    let item: Item
+    let plane: CoverFlowPlane
+    let layout: CoverFlowLayout
+    let load: @MainActor (Item) async -> Value?
+    let content: (Item, Value?) -> Content
+
+    @State private var value: Value?
+
+    var body: some View {
+        CoverFlowCover(plane: self.plane, layout: self.layout) {
+            self.content(self.item, self.value)
+        }
+        .task {
+            let value = await self.load(self.item)
+            guard !Task.isCancelled else { return }
+            self.value = value
+        }
+    }
+}
+
+private struct CoverFlowCover<Content: View>: View {
+    let plane: CoverFlowPlane
+    let layout: CoverFlowLayout
+    let content: () -> Content
+
+    private var viewport: CGSize { self.layout.viewport }
+    private var configuration: CoverFlowConfiguration { self.layout.configuration }
+
+    var body: some View {
+        VStack(spacing: self.plane.reflectionGap) {
+            self.face
+            self.reflection
         }
         .compositingGroup()
-        .projectionEffect(plane.projection)
+        .projectionEffect(self.plane.projection)
         .frame(width: self.viewport.width, height: self.viewport.height, alignment: .topLeading)
-        .clipShape(self.clip(for: plane))
+        .clipShape(self.clip)
     }
 
-    private func clip(for plane: CoverFlowPlane) -> Path {
-        let camera = plane.cameraClip(in: self.viewport)
-        switch (camera, plane.clip) {
+    private var clip: Path {
+        let camera = self.plane.cameraClip(in: self.viewport)
+        switch (camera, self.plane.clip) {
         case let (camera?, depth?):
             return Path(camera.intersection(depth))
         case let (clip?, nil), let (nil, clip?):
@@ -61,21 +106,20 @@ struct CoverFlowCoversView<Item, ID: Hashable, Content: View>: View {
     }
 
     @ViewBuilder
-    private func face(for plane: CoverFlowPlane) -> some View {
-        let content = self.coverContent(for: plane)
+    private var face: some View {
         if self.configuration.preservesContentAlpha {
-            content.colorMultiply(Color(white: plane.intensity))
+            self.coverContent.colorMultiply(Color(white: self.plane.intensity))
         } else {
-            content.overlay(Color.black.opacity(1 - plane.intensity))
+            self.coverContent.overlay(Color.black.opacity(1 - self.plane.intensity))
         }
     }
 
     @ViewBuilder
-    private func reflection(for plane: CoverFlowPlane) -> some View {
+    private var reflection: some View {
         let reflection = self.configuration.reflection
-        let near = plane.intensity * reflection.nearIntensity
-        let far = plane.intensity * reflection.farIntensity
-        let mirrored = self.coverContent(for: plane).scaleEffect(x: 1, y: -1)
+        let near = self.plane.intensity * reflection.nearIntensity
+        let far = self.plane.intensity * reflection.farIntensity
+        let mirrored = self.coverContent.scaleEffect(x: 1, y: -1)
 
         if self.configuration.preservesContentAlpha {
             mirrored.mask {
@@ -92,14 +136,14 @@ struct CoverFlowCoversView<Item, ID: Hashable, Content: View>: View {
         }
     }
 
-    private func coverContent(for plane: CoverFlowPlane) -> some View {
+    private var coverContent: some View {
         let background: Color = self.configuration.preservesContentAlpha ? .clear : .black
         return
             background
-            .frame(width: plane.size.width, height: plane.size.height)
+            .frame(width: self.plane.size.width, height: self.plane.size.height)
             .overlay(alignment: .top) {
-                self.content(self.items[plane.itemIndex])
-                    .frame(width: plane.size.width, height: plane.size.height)
+                self.content()
+                    .frame(width: self.plane.size.width, height: self.plane.size.height)
             }
             .clipped()
     }

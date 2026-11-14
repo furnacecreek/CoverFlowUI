@@ -17,7 +17,7 @@ public struct CoverFlowView<Item, ID: Hashable, Content: View>: View {
     private var caption: CaptionOptions?
     private var activationAction: ((Item) -> Void)?
     private var searchKey: ((Item) -> String)?
-    let content: (Item) -> Content
+    private let content: CoverFlowContent<Item, Content>
 
     @State private var scrollPosition = ScrollPosition()
     @State private var interaction = CoverFlowInteractionState()
@@ -40,6 +40,45 @@ public struct CoverFlowView<Item, ID: Hashable, Content: View>: View {
         configuration: CoverFlowConfiguration = .classic,
         captionFrame: CGRect? = nil,
         @ViewBuilder content: @escaping (Item) -> Content
+    ) {
+        self.init(
+            items: items, id: id, selection: selection, configuration: configuration,
+            captionFrame: captionFrame, content: .immediate(content)
+        )
+    }
+
+    /// Creates a pane that loads a value for each mounted cover and shares it with the reflection.
+    /// The builder receives nil while loading or if the loader returns nil. The task follows
+    /// the item's identity and is canceled when the cover leaves the view.
+    public init<Value>(
+        items: [Item],
+        id: KeyPath<Item, ID>,
+        selection: Binding<ID?>,
+        configuration: CoverFlowConfiguration = .classic,
+        captionFrame: CGRect? = nil,
+        load: @escaping @MainActor (Item) async -> Value?,
+        @ViewBuilder content: @escaping (Item, Value?) -> Content
+    ) {
+        self.init(
+            items: items, id: id, selection: selection, configuration: configuration,
+            captionFrame: captionFrame,
+            content: .asynchronous { item, plane, layout in
+                AnyView(
+                    CoverFlowAsyncCover(
+                        item: item, plane: plane, layout: layout, load: load, content: content
+                    )
+                )
+            }
+        )
+    }
+
+    private init(
+        items: [Item],
+        id: KeyPath<Item, ID>,
+        selection: Binding<ID?>,
+        configuration: CoverFlowConfiguration,
+        captionFrame: CGRect?,
+        content: CoverFlowContent<Item, Content>
     ) {
         self.items = items
         self.id = id
@@ -156,6 +195,21 @@ extension CoverFlowView where Item: Identifiable, ID == Item.ID {
         self.init(
             items: items, id: \.id, selection: selection, configuration: configuration,
             captionFrame: captionFrame, content: content
+        )
+    }
+
+    /// Creates an asynchronously loaded pane using each item's Identifiable ID for selection.
+    public init<Value>(
+        items: [Item],
+        selection: Binding<ID?>,
+        configuration: CoverFlowConfiguration = .classic,
+        captionFrame: CGRect? = nil,
+        load: @escaping @MainActor (Item) async -> Value?,
+        @ViewBuilder content: @escaping (Item, Value?) -> Content
+    ) {
+        self.init(
+            items: items, id: \.id, selection: selection, configuration: configuration,
+            captionFrame: captionFrame, load: load, content: content
         )
     }
 }
